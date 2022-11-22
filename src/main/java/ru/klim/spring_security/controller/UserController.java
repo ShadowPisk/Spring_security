@@ -165,7 +165,7 @@ public class UserController {
         return "redirect:/adminSensor";
     }
 
-    @GetMapping("/adminSensor/search")
+    @GetMapping({"/adminSensor/search", "sensor/search"})
     public String search(@RequestParam(value = "search") String search, Model model){
         if (sensorService.searchBy(search)!=null) {
             model.addAttribute("result", sensorService.searchBy(search));
