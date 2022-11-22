@@ -6,11 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.klim.spring_security.model.Sensor;
-import ru.klim.spring_security.model.Type;
 import ru.klim.spring_security.model.User;
 import ru.klim.spring_security.repository.SensorRepository;
 import ru.klim.spring_security.repository.TypeRepository;
-import ru.klim.spring_security.service.RoleService;
 import ru.klim.spring_security.service.SecurityService;
 import ru.klim.spring_security.service.SensorService;
 import ru.klim.spring_security.service.UserService;
@@ -18,17 +16,13 @@ import ru.klim.spring_security.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private RoleService roleService;
     @Autowired
     private SensorService sensorService;
 
@@ -89,16 +83,6 @@ public class UserController {
         return "addSensor";
     }
 
-//    @PostMapping("/adminSensor/addSensor")
-//    public String registration(@ModelAttribute("sensorForm") Sensor sensorForm, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "addSensor";
-//        }
-//
-//        sensorService.save(sensorForm);
-//        return "redirect:/adminSensor";
-//    }
-
     @PostMapping("/adminSensor/addSensor")
     public String registration(
              @RequestParam String name
@@ -108,8 +92,7 @@ public class UserController {
             ,@RequestParam String type
             ,@RequestParam String unit
             ,@RequestParam int rangeMin
-            ,@RequestParam int rangeMax
-            ,Model mod) {
+            ,@RequestParam int rangeMax) {
         Sensor sensor = new Sensor(name, model, location, description, rangeMin, rangeMax);
         sensor.setType(typeRepository.findTypeByName(type));
         sensor.setTypeName(typeRepository.findTypeByName(type).getName());
@@ -165,12 +148,20 @@ public class UserController {
         return "redirect:/adminSensor";
     }
 
-    @GetMapping({"/adminSensor/search", "/sensor/search"})
+    @GetMapping("/adminSensor/search")
     public String search(@RequestParam(value = "search") String search, Model model){
         if (sensorService.searchBy(search)!=null) {
             model.addAttribute("result", sensorService.searchBy(search));
         }
         return "search";
+    }
+
+    @GetMapping( "/sensor/search")
+    public String searchUser(@RequestParam(value = "search") String search, Model model){
+        if (sensorService.searchBy(search)!=null) {
+            model.addAttribute("result", sensorService.searchBy(search));
+        }
+        return "searchUser";
     }
 
 }

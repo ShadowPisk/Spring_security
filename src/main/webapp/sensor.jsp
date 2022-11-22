@@ -19,9 +19,9 @@
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a>
         </h2>
     </c:if>
-    <form method="get" action="/adminSensor/search">
+    <form method="get" action="/sensor/search">
         <input type="text" name="search" />
-        <button type="submit" href="/adminSensor/search">Search</button>
+        <button type="submit" href="/sensor/search">Search</button>
     </form>
 
     <table>

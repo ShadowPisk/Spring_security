@@ -1,7 +1,5 @@
 package ru.klim.spring_security.model;
 
-import ru.klim.spring_security.model.Sensor;
-
 import javax.persistence.*;
 import java.util.Set;
 

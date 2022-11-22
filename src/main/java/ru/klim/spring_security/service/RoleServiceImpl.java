@@ -9,8 +9,6 @@ import ru.klim.spring_security.repository.UserRepository;
 @Service
 public class RoleServiceImpl implements RoleService{
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private RoleRepository roleRepository;
 
     @Override

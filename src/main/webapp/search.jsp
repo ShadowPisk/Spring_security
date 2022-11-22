@@ -1,8 +1,5 @@
-<%@ page import="java.io.*,java.util.*,java.sql.*" %>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,28 +20,37 @@
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a>
         </h2>
     </c:if>
-    <form method="get" action="/adminSensor/search">
+    <form method="get" action="/adminSearch/search">
         <input type="text" name="search"/>
-        <button type="submit" href="/adminSensor/search">Search</button>
+        <button type="submit" href="/adminSearch/search">Search</button>
     </form>
     <table>
         <tr>
+            <th></th>
             <th>Name</th>
             <th>Model</th>
             <th>Type</th>
             <th>Range</th>
             <th>Unit</th>
             <th>Location</th>
+            <th></th>
         </tr>
         <c:forEach items="${result}" var="row">
             <tr>
+                <td>
+                    <button><a href="/adminSensor/${row.id}/editSensor">Edit</a></button>
+                </td>
                 <td title="${row.description}">${row.name}</td>
                 <td>${row.model}</td>
                 <td>${row.typeName}</td>
                 <td>${row.rangeMin} - ${row.rangeMax}</td>
                 <td>${row.unit}</td>
                 <td>${row.location}</td>
-
+                <td>
+                    <form method="post" action="/adminSensor/${row.id}/remove">
+                        <button type="submit" href="/adminSensor">Delete</button>
+                    </form>
+                </td>
             </tr>
         </c:forEach>
     </table>
