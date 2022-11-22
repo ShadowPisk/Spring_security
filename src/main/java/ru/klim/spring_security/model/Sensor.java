@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 @Table(name = "sensors")
 public class Sensor {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NotNull(message = "Name may not be null")
     @Size(max = 30)
