@@ -24,11 +24,11 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public List<Sensor> searchBy(String name) {
+    public List<Sensor> searchBy(String text) {
         List<Sensor> resultSet = new ArrayList<>();
         for (Sensor sensor :
                 sensorRepository.findAll()) {
-            if (sensor.toString().toUpperCase().contains(name.toUpperCase())) {
+            if (sensor.toString().toUpperCase().contains(text.toUpperCase())) {
                 resultSet.add(sensor);
             }
         }

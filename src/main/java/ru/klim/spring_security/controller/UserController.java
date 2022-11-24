@@ -1,6 +1,8 @@
 package ru.klim.spring_security.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,8 +17,11 @@ import ru.klim.spring_security.service.UserService;
 import ru.klim.spring_security.validator.UserValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -55,7 +60,7 @@ public class UserController {
 
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
-        return "redirect:/sensor";
+        return "redirect:/sensor/1";
     }
 
     @GetMapping("/login")
@@ -66,8 +71,18 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping({"/", "/sensor","/adminSensor"})
-    public String welcome(HttpServletRequest httpServletRequest, Model model) {
+    @GetMapping({"/{page}", "/sensor/{page}","/adminSensor/{page}"})
+    public String welcome(HttpServletRequest httpServletRequest, Model model,Pageable pageable, @PathVariable(value = "page") @Min(1) int page) {
+        pageable = PageRequest.of(0, 4);
+        if (sensorRepository.findAll(pageable).getTotalPages()<=page){
+            pageable = PageRequest.of(sensorRepository.findAll(pageable).getTotalPages() - 1, 4);
+        }else pageable = PageRequest.of(page - 1, 4);
+        List<Integer> pageList = new ArrayList<>();
+        for (int i = 0; i < sensorRepository.findAll(pageable).getTotalPages(); i++) {
+            pageList.add(i+1);
+        }
+        model.addAttribute("pages", sensorRepository.findAll(pageable).get().collect(Collectors.toList()));
+        model.addAttribute("pageList", pageList);
         model.addAttribute("sensors", sensorRepository.findAll());
         model.addAttribute("type", typeRepository.findAll());
         if (httpServletRequest.isUserInRole("ROLE_ADMIN")) {
@@ -76,6 +91,13 @@ public class UserController {
         return "sensor";
     }
 
+    @GetMapping({"/", "/sensor", "/adminSensor"})
+    public String redirect(HttpServletRequest httpServletRequest, Model model) {
+        if (httpServletRequest.isUserInRole("ROLE_ADMIN")) {
+            return "redirect:/adminSensor/1";
+        }
+        return "redirect:/sensor/1";
+    }
 
     @GetMapping("/adminSensor/addSensor")
     public String addSensor(Model model) {

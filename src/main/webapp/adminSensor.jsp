@@ -35,7 +35,7 @@
                 <th>Location</th>
                 <th></th>
             </tr>
-            <c:forEach items="${sensors}" var="row">
+            <c:forEach items="${pages}" var="row">
                 <tr>
                     <td>
                         <button><a href="/adminSensor/${row.id}/editSensor">Edit</a></button>
@@ -56,6 +56,11 @@
         </table>
     <h3>Total : ${sensors.size()}</h3>
 
+    <div class="pagination">
+        <c:forEach items="${pageList}" var="row">
+        <a href="/adminSensor/${row}">${row}</a>
+        </c:forEach>
+    </div>
 </div>
 <form action="/adminSensor/addSensor" target="_blank">
     <button>Add sensor</button>

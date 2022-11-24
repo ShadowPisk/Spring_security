@@ -19,11 +19,10 @@
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a>
         </h2>
     </c:if>
-    <form method="get" action="/sensor/search">
+    <form method="get" action="/adminSensor/search">
         <input type="text" name="search" />
-        <button type="submit" href="/sensor/search">Search</button>
+        <button type="submit" href="/adminSensor/search">Search</button>
     </form>
-
     <table>
         <tr>
             <th>Name</th>
@@ -33,20 +32,24 @@
             <th>Unit</th>
             <th>Location</th>
         </tr>
-
-        <c:forEach items="${sensors}" var="row">
-                <tr>
-                    <td title="${row.description}">${row.name}</td>
-                    <td>${row.model}</td>
-                    <td>${typ.name}</td>
-                    <td>${row.rangeMin} - ${row.rangeMax}</td>
-                    <td>${typ.unit}</td>
-                    <td>${row.location}</td>
-                </tr>
+        <c:forEach items="${pages}" var="row">
+            <tr>
+                <td title="${row.description}">${row.name}</td>
+                <td>${row.model}</td>
+                <td>${row.typeName}</td>
+                <td>${row.rangeMin} - ${row.rangeMax}</td>
+                <td>${row.unit}</td>
+                <td>${row.location}</td>
+            </tr>
         </c:forEach>
-
     </table>
+    <h3>Total : ${sensors.size()}</h3>
 
+    <div class="pagination">
+        <c:forEach items="${pageList}" var="row">
+            <a href="/sensor/${row}">${row}</a>
+        </c:forEach>
+    </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
